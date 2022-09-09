@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+    Functional Java
+        - Java 8 Examples
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Functional Java">
+    <meta name="description" content="Static blog generated with JBake">
+
+    <!-- Style -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootswatch/3.1.1/yeti/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="/css/base.css">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav icon -->
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+  </head>
+  <body>      
+    <nav class="navbar navbar-default navbar-fixed-top " role="navigation">
+      <div class="container">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="/"><img src="/img/white-lambda6.png" height="20"/>&nbsp;Functional Java</a>
+        </div>
+        
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+          <ul class="nav navbar-nav">
+			<li><a href="/docs.html">Docs</a></li>
+			<li><a href="/community.html">Community</a></li>
+			<li><a href="/download.html">Download</a></li>
+          </ul>
+        
+        <!-- Right navigation -->
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="/feed.xml" title="Rss"><i class="fa fa-rss"></i> Feed</a></li>
+        </ul>
+        <!-- Right navigation end -->
+
+      </div><!-- /.navbar-collapse -->
+      </div><!-- /.container-fluid -->
+    </nav><!-- /.navbar -->
+
+    <!-- Begin page content -->
+    <div class="container">
+
+      <div class="row">
+        <div class="col-md-12">
+          <article>
+              <h2>Java 8 Examples</h2>
+            <p><div id="preamble"> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p>These examples use the Java 8 syntax. Corresponding examples are also available in <a href="examples-java7.html">Java 7</a> and the original <a href="examples-bgga.html">proposed BGGA</a> syntax.</p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>The example list is:</p> 
+  </div> 
+  <div class="ulist"> 
+   <ul> 
+    <li> <p><a href="#arrayExists">Array exists</a></p> </li> 
+    <li> <p><a href="#arrayFilter">Array filter</a></p> </li> 
+    <li> <p><a href="#arrayFoldLeft">Array foldLeft</a></p> </li> 
+    <li> <p><a href="#arrayForall">Array forall</a></p> </li> 
+    <li> <p><a href="#arrayMap">Array map</a></p> </li> 
+    <li> <p><a href="#listMap">List map</a></p> </li> 
+    <li> <p><a href="#optionBind">Option bind</a></p> </li> 
+    <li> <p><a href="#optionFilter">Option filter</a></p> </li> 
+    <li> <p><a href="#optionMap">Option map</a></p> </li> 
+    <li> <p><a href="#ioWalkthrough">IO Walkthrough</a></p> </li> 
+   </ul> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="arrayExists">Array Exists</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Array_exists.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Checks for the existence of a String that has all lower case characters. In this case it is true (since, the case of "what"), but without this specific case, it is false. This example uses List.forall to test the characters of the String.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.Array;
+import static fj.data.Array.array;
+import static fj.data.List.fromString;
+import static fj.function.Characters.isLowerCase;
+
+public final class Array_exists {
+    public static void main(final String[] args) {
+        final Array&lt;String&gt; a = array("Hello", "There", "what", "DAY", "iS", "iT");
+        final boolean b = a.exists(s -&gt; fromString(s).forall(isLowerCase));
+        System.out.println(b); // true ("what" is the only value that qualifies; try removing it)
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="arrayFilter">Array Filter</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Array_filter.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Removes elements from an array that do not meet a certain criteria. In this case, we are using an array of integers and the filter removes any odd numbers.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.Array;
+import static fj.data.Array.array;
+import static fj.Show.arrayShow;
+import static fj.Show.intShow;
+import static fj.function.Integers.even;
+
+public final class Array_filter {
+    public static void main(final String[] args) {
+        final Array&lt;Integer&gt; a = array(97, 44, 67, 3, 22, 90, 1, 77, 98, 1078, 6, 64, 6, 79, 42);
+        final Array&lt;Integer&gt; b = a.filter(even);
+        final Array&lt;Integer&gt; c = a.filter(i -&gt; i % 2 == 0);
+        arrayShow(intShow).println(b); // {44,22,90,98,1078,6,64,6,42}
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="arrayFoldLeft">Array Fold Left</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Array_foldLeft.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Reduces the list applying a function per element. In this case, the fold sums the elements with a starting value of 0. Since 0 + 97 + 44 + 67 + 3 + 22 + 90 + 1 + 77 + 98 + 1078 + 6 + 64 + 6 + 79 + 42 == 1774 the result of the fold is 1774.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.F;
+import fj.data.Array;
+import static fj.data.Array.array;
+import static fj.function.Integers.add;
+
+public final class Array_foldLeft {
+    public static void main(final String[] args) {
+        final Array&lt;Integer&gt; a = array(97, 44, 67, 3, 22, 90, 1, 77, 98, 1078, 6, 64, 6, 79, 42);
+        final int b = a.foldLeft(add, 0);
+
+        F&lt;Integer, F&lt;Integer, Integer&gt;&gt; add2 = i -&gt; (j -&gt; i + j);
+        final int c = a.foldLeft(add2, 0);
+        System.out.println(b); // 1774
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="arrayForall">Array For All</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Array_forall.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Checks that all Strings in the array have lower case characters. In this case, the check fails because of the case of "There", however, the removal of this case produces a result of true.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.Array;
+import static fj.data.Array.array;
+import static fj.data.List.fromString;
+import static fj.function.Characters.isLowerCase;
+
+public final class Array_forall {
+    public static void main(final String[] args) {
+        final Array&lt;String&gt; a = array("hello", "There", "what", "day", "is", "it");
+        final boolean b = a.forall(s -&gt; fromString(s).forall(isLowerCase));
+        System.out.println(b); // false ("There" is a counter-example; try removing it)
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="arrayMap">Array Map</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Array_map.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Maps a function across the array of integers. In this case, the function adds 42 to each element of the array to produce a new array.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.Array;
+import static fj.data.Array.array;
+import static fj.function.Integers.add;
+import static fj.Show.arrayShow;
+import static fj.Show.intShow;
+
+public final class Array_map {
+    public static void main(final String[] args) {
+        final Array&lt;Integer&gt; a = array(1, 2, 3);
+        final Array&lt;Integer&gt; b = a.map(add.f(42));
+        final Array&lt;Integer&gt; c = a.map(i -&gt; i + 42);
+        arrayShow(intShow).println(b); // {43,44,45}
+        arrayShow(intShow).println(c); // {43,44,45}
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="listMap">List Map</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/List_map.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Maps a function across a list of integers. This is similar to the Array map. This example adds 42 to each element of the list to produce a new list.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.List;
+import static fj.data.List.list;
+import static fj.function.Integers.add;
+import static fj.Show.intShow;
+import static fj.Show.listShow;
+
+public final class List_map {
+    public static void main(final String[] args) {
+        final List&lt;Integer&gt; a = list(1, 2, 3);
+        final List&lt;Integer&gt; b = a.map(add.f(42));
+        final List&lt;Integer&gt; c = a.map(i -&gt; i = 42);
+        listShow(intShow).println(b); // [43,44,45]
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="optionBind">Option Bind</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Option_bind.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Binds a function across the optional value type. The function checks if the contained value is even and if it is multiples that value by 3 and returns that new value. If the contained value is odd (or if there is no value), then no value is returned (none).</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.F;
+import fj.data.Option;
+import static fj.Show.intShow;
+import static fj.Show.optionShow;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+
+public final class Option_bind {
+    public static void main(final String[] args) {
+        final Option&lt;Integer&gt; o1 = some(7);
+        final Option&lt;Integer&gt; o2 = some(8);
+        final Option&lt;Integer&gt; o3 = none();
+
+        F&lt;Integer, Option&lt;Integer&gt;&gt; f = i -&gt; i % 2 == 0 ? some(i * 3) : none();
+        final Option&lt;Integer&gt; o4 = o1.bind(f);
+        final Option&lt;Integer&gt; o5 = o2.bind(f);
+        final Option&lt;Integer&gt; o6 = o3.bind(f);
+
+        optionShow(intShow).println(o4); // None
+        optionShow(intShow).println(o5); // Some(24)
+        optionShow(intShow).println(o6); // None
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="optionFilter">Option filter</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Option_filter.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Removes the value from the optional value if it does not match a given predicate. In this case the condition for preservation is that the contained value is an even number</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.F;
+import fj.data.Option;
+import static fj.Show.intShow;
+import static fj.Show.optionShow;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+import static fj.function.Integers.even;
+
+public final class Option_filter {
+    public static void main(final String[] args) {
+        final Option&lt;Integer&gt; o1 = some(7);
+        final Option&lt;Integer&gt; o2 = none();
+        final Option&lt;Integer&gt; o3 = some(8);
+
+        final Option&lt;Integer&gt; o4 = o1.filter(even);
+        final Option&lt;Integer&gt; o5 = o2.filter(even);
+        final Option&lt;Integer&gt; o6 = o3.filter(even);
+
+        F&lt;Integer, Boolean&gt; f = i -&gt; i % 2 == 0;
+        final Option&lt;Integer&gt; o7 = o1.filter(f);
+        final Option&lt;Integer&gt; o8 = o1.filter(f);
+        final Option&lt;Integer&gt; o9 = o1.filter(i -&gt; i % 2 == 0);
+
+        optionShow(intShow).println(o4); // None
+        optionShow(intShow).println(o5); // None
+        optionShow(intShow).println(o6); // Some(8)
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="optionMap">Option Map</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/Option_map.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Maps a function across the optional value type. The function adds 42 to any contained value.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">import fj.data.Option;
+import static fj.Show.intShow;
+import static fj.Show.optionShow;
+import static fj.data.Option.none;
+import static fj.data.Option.some;
+import static fj.function.Integers.add;
+
+public final class Option_map {
+    public static void main(final String[] args) {
+        final Option&lt;Integer&gt; o1 = some(7);
+        final Option&lt;Integer&gt; o2 = none();
+        final Option&lt;Integer&gt; p1 = o1.map(add.f(42));
+        final Option&lt;Integer&gt; p2 = o2.map(add.f(42));
+
+        final Option&lt;Integer&gt; p3 = o1.map(i -&gt; i + 42);
+        final Option&lt;Integer&gt; p4 = o2.map(i -&gt; i + 42);
+
+        optionShow(intShow).println(p1); // Some(49)
+        optionShow(intShow).println(p2); // None
+    }
+}</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div> 
+<div class="sect1"> 
+ <h2 id="ioWalkthrough">IO Walkthrough</h2> 
+ <div class="sectionbody"> 
+  <div class="paragraph"> 
+   <p><a href="https://github.com/functionaljava/functionaljava/blob/master/demo/src/main/java/fj/demo/IOWalkthrough.java">Github Source</a></p> 
+  </div> 
+  <div class="paragraph"> 
+   <p>Demonstrates how to work with the IO type.</p> 
+  </div> 
+  <div class="listingblock"> 
+   <div class="content"> 
+    <pre class="prettyprint highlight"><code class="language-java" data-lang="java">// IO is just a container to defer a computation (lazy), with the intention
+// to encapsulate computations that either consume and/or produce side-effects
+// the computation is not (yet) executed on creation hence it can be treated
+// like a value
+
+final IO&lt;Unit&gt; askName = () -&gt; {
+    System.out.println("Hi, what's your name?");
+    return Unit.unit();
+};
+
+// fj.data.IOFunctions contains a lot of convenience functions regarding IO, the
+// above example could be rewritten with IOFunctions.stdoutPrintln
+// we now create an IO value to prompt for the name if executed
+
+IO&lt;Unit&gt; promptName = IOFunctions.stdoutPrint("Name: ");
+
+// we can compose these two values with fj.data.IOFunctions.append, since they
+// both are not interested in any runtime value
+
+IO&lt;Unit&gt; askAndPromptName = IOFunctions.append(askName, promptName);
+
+// now we create an IO value to read a line from stdin
+
+final IO&lt;String&gt; readName = () -&gt; new BufferedReader(new InputStreamReader(System.in)).readLine();
+
+// this is the same as IOFunctions.stdinReadLine()
+
+// now we create a function which takes a string, upper cases it and creates
+// an IO value that would print the upper cased string if executed
+
+final F&lt;String, IO&lt;Unit&gt;&gt; upperCaseAndPrint = F1Functions.&lt;String, IO&lt;Unit&gt;, String&gt;o(IOFunctions::stdoutPrintln).f(String::toUpperCase);
+
+// we now want to compose reading the name with printing it, for that we need to
+// have access to the runtime value that is returned when the
+// IO value for read is executed, hence we use fj.data.IOFunctions.bind instead
+// of fj.data.IOFunctions.append
+
+final IO&lt;Unit&gt; readAndPrintUpperCasedName = IOFunctions.bind(readName, upperCaseAndPrint);
+
+// so append is really just a specialised form of bind, ignoring the runtime
+// value of the IO execution that was composed before us
+
+final IO&lt;Unit&gt; program = IOFunctions.bind(askAndPromptName, ignored -&gt; readAndPrintUpperCasedName);
+
+// this is the same as writing IOFunctions.append(askAndPromptName, readAndPrintUpperCasedName)
+
+// we have recorded the entire program, but have not run anything yet
+// now we get to the small dirty part at the end of our program where we actually
+// execute it
+
+// we can either choose to just call program.run(), which allows the execution to escape
+// or we use safe to receive an fj.data.Either with the potential exception on the
+// left side
+
+toSafeValidation(program).run().on((IOException e) -&gt; { e.printStackTrace(); return Unit.unit(); });
+
+// doing function composition like this can be quite cumbersome, since you will end
+// up nesting parenthesis unless you flatten it out by
+// assigning the functions to variables like above, but you can use the fj.F1W
+// syntax wrapper for composing single-argument functions and fj.data.IOW
+// for composing IO values instead, the entire program can be written like so:
+
+IOW.lift(stdoutPrintln("What's your name again?"))
+        .append(stdoutPrint("Name: "))
+        .append(stdinReadLine())
+        .bind(F1W.lift((String s) -&gt; s.toUpperCase())
+        .andThen(IOFunctions::stdoutPrintln))
+        .safe().run().on((IOException e) -&gt; { e.printStackTrace(); return Unit.unit(); });</code></pre> 
+   </div> 
+  </div> 
+ </div> 
+</div></p>
+          </article>
+        </div> <!-- /.col-md-12 -->
+      </div> <!-- /.row -->
+
+      </div><!-- /.container -->
+
+    <footer>
+      <div class="container">
+        <hr>
+        <div class="row">
+          <div class="col-xs-10">
+            <p class="text-muted credit">&copy;  2014-2018 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake v2.6.1</a> | <i title="Linux" class="fa fa-linux"></i></p>
+          </div>
+          <div class="col-xs-2 gotop">
+            <a href="#"><i class="fa fa-arrow-circle-up"> top</i></a>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/gist-embed/1.6/gist-embed.min.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-28753951-2', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+    <script type="text/javascript">
+      <!-- load prettify only when needed -->
+      $(document).ready(function(){
+        var prettify = false;
+        var classToAdd = 'prettyprint snippet';
+        $("pre > code").each(function() {
+          $("pre > code").parent().addClass(classToAdd);
+          prettify = true;
+        });
+        if(prettify) {
+          prettyPrint();
+        }
+      });
+    </script>
+
+
+        </body>
+</html>

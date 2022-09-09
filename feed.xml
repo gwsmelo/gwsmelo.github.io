@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Functional Java.</title>
+    <link>http://functionaljava.github.io/</link>
+    <atom:link href="http://functionaljava.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <description>Functional programming in Java</description>
+    <language>en</language>
+    <pubDate>Feb 26, 2022 2:18:28 PM</pubDate>
+    <lastBuildDate>Feb 26, 2022 2:18:28 PM</lastBuildDate>
+
+  </channel> 
+</rss>
